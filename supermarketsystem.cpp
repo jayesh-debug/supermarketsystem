@@ -55,3 +55,35 @@ class product{
       cout<<"The proudct Has been created";
       getch();
   }
+  void display_all(){
+        
+
+        cout<<"Display All RECORD"<<endl;
+        fp.open("shop.dat", ios::in);
+        while (fp.read((char* ) & pr, sizeof(product)))
+        {
+            pr.show_product();
+            cout<<"\n\n========================\n"<<endl;
+            getch();
+        }
+     fp.close();
+     getch();
+  }
+  void display_sp(int n)
+  {
+      int flag =0;
+      fp.open("shop.dat", ios:: in);
+      while (fp.read((char *)& pr, sizeof(product)))
+      {
+          if(pr.retpno() == n){
+
+
+              pr.show_product();
+              flag=1;
+          }
+      }
+      fp.close();
+      if (flag==0)
+      cout<<"record not exist"<<endl;
+      getch();
+  }
