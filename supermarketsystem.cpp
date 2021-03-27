@@ -75,7 +75,7 @@ class product{
       fp.open("shop.dat", ios:: in);
       while (fp.read((char *)& pr, sizeof(product)))
       {
-          if(pr.retpno() == n){
+          if(pr.retno() == n){
 
 
               pr.show_product();
@@ -86,4 +86,15 @@ class product{
       if (flag==0)
       cout<<"record not exist"<<endl;
       getch();
+  }
+  void modify_product(){
+      int no,found=0;
+      cout<<"Modify"<<endl;
+      cout<<"Please Enter The Product NO.of the Product"<<endl;
+    cin>>no;
+    fp.open("Shop.dat", ios:: in | ios::out);
+    while (fp.read((char *)& pr, sizeof(product)) && found ==0)
+    {
+        if (pr.retno() == no)
+    }
   }
