@@ -95,6 +95,43 @@ class product{
     fp.open("Shop.dat", ios:: in | ios::out);
     while (fp.read((char *)& pr, sizeof(product)) && found ==0)
     {
-        if (pr.retno() == no)
+        if (pr.retno() == no){
+            pr.show_product();
+            cout<<"please Enter The New Details of Product"<<endl;
+            pr.create_product();
+            int pos = -1 * sizeof(pr);
+            fp.seekp(pos, ios::cur);
+            fp.write((char* ) & pr,sizeof(product));
+            cout<<"Record Updated";
+            found=1;
+        }
     }
+    fp.close();
+    if(found==0)
+    cout<<"Record Not found";
+    getch();
+  }
+
+  void delete_product(){
+      int no;
+      cout<<"DELETE RECORD";
+      cout<<"Please Enter The product No.of the product YOu want to DELETE";
+      cin>>no;
+      fp.open("Temp.dat",ios::out);
+      fp.seekg(0, ios::beg);
+      while (fp.read((char * )& pr, sizeof(product)))
+      {
+          if(pr.retno() !=no)
+          {
+              fp2.write((char * ) & pr, sizeof(product));
+
+          }
+      }
+      fp2.close();
+      fp.close();
+      remove("Shop.dat");
+      remove("Temp.dat", "Shop.dat");
+      cout<<"Reord eled..";
+      getch();
+
   }
