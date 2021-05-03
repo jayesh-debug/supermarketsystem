@@ -37,13 +37,14 @@ class product{
     char * retname(){
         return prname;
     }
-    int ratdis(){
+    int retdis(){
         return dis;
 
     }
 
 };
       fstream fp;
+      fstream fp2;
       product pr;
 
  
@@ -129,9 +130,161 @@ class product{
       }
       fp2.close();
       fp.close();
-      remove("Shop.dat");
-      remove("Temp.dat", "Shop.dat");
-      cout<<"Reord eled..";
+      remove("shop.dat");
+      rename("Temp.dat", "shop.dat");
+      cout<<"Reor deleted..";
       getch();
 
-  }
+  } 
+   
+   void menu(){
+       fp.open("shop.dat", ios:: in);
+       if(!fp){
+           cout<<"ERROR!!! FILE COULD NOT BE OPEN\n\n\n GO TO ADMIN MENU TO create File";
+           cout<<"\n\n\n Programis closing ...";
+           getch();
+       }
+       cout<<"Product Menu";
+       cout<<"=========================="<<endl;
+       cout<<"P.NO.\t\tName\t\tPRICE\n";
+       cout<<"============================="<<endl;
+       while (fp.read((char* ) & pr, sizeof(product)))
+       {
+           cout<<pr.retno()<<endl<<pr.retname()<<endl<<pr.retprice()<<endl;
+
+       }
+       fp.close();
+   }
+    void place_order()
+    {
+        int order_arr[50], quan[50], c = 0;
+        float amt, damt, total=0;
+        char ch='Y';
+       menu();
+       cout<<"\n====================";
+       cout<<"\n PLACE YOUR ORDER"<<endl;
+       cout<<"\n====================="<<endl;
+
+       do {
+           cout<<"Enter the poduct No. of The product :";
+           cin>>order_arr[c];
+           cout<<"Quantity in number"<<endl;
+           cin>>quan[c];
+           c++;
+           cout<<"Do you Want to Order Another  Product? (y/n"<<endl;
+           cin>>ch;
+
+       } 
+       while (ch=='y' || ch=='y');
+       cout<<"Thank You For Placing The Order";
+       getch();
+       cout<<"\n\n****************************** INVOICE ****************************\n"<<endl;
+    cout<<"\npr No.\tpr Name\tQuatntity\tPrice\tAmount \tAmount after discount\n"<<endl;
+    for (int x=0;x<=c;x++){
+        fp.open("shop.dat" ,ios::in);
+        fp.read((char*) & pr, sizeof(product));
+        while (!fp.eof()){
+            if(pr.retno() == order_arr[x])
+            {
+                 amt=pr.retprice() * quan[x];
+                 damt=amt-(amt * pr.retdis() /100);
+                 cout<<"\n "<<order_arr[x]<<"\t"<<pr.retname()<<"\t"<<quan[x]<<"\t\t"<<pr.retprice()<<"\t"<<amt<<"\t\t"<<damt;
+                 total +=damt;
+
+            }
+            fp. read((char* ) & pr, sizeof(product));
+
+        }
+        fp.close();
+    }
+    cout<<"Total ="<<total<<endl;
+    getch();
+
+    }
+    void intro () {
+
+        cout<<endl<<endl<<"SUPER MARKET";
+        cout<<endl<<endl<<"BILLING";
+        cout<<endl<<endl<<"PROJECT";
+        cout<<"MADE BY : SUPERMARKET SYS";
+        cout<<endl<<"Website : WWW.PupapersBook.com";
+        getch();
+
+    }
+     void admin_menu() {
+         char ch2;
+         cout<<"ADMIN MENU";
+         cout<<"CREATE PRODUCT";
+         cout<<"DISPLAY ALL PRODUCTS"<<endl;
+         cout<<"QUERIY"<<endl;
+         cout<<"MODIFY PRODUCT"<<endl;
+         cout<<"DELETE PRODUCT"<<endl;
+         cout<<"VIEW PRODUCT MENU"<<endl;
+         cout<<"BACK To MAIN MENU";
+         cout<<"PLEASE Enter your choice(1-7)";
+         ch2=getche();
+         switch (ch2){
+             case '1':
+             write_product();
+             break;
+             case '2':
+             display_all();
+             break;
+             case '3':
+             int num;
+             cout<<"Please Enter The Product No."<<endl;
+             cin>>num;
+             display_sp(num);
+             break;
+             case '4':
+             modify_product();
+             break;
+             case '5':
+             delete_product();
+             break;
+             case '6' :
+             menu();
+             getch();
+             case '7':
+             break;
+             default:
+             cout<<"\a";
+               admin_menu();
+
+        
+         }
+    
+    
+     }
+
+
+
+     int main(){
+         char ch;
+         intro ();
+         do 
+         {
+             cout<<"MAIL MENU";
+             cout<<"CUSTOMER";
+             cout<<"ADMINISITRATOR";
+             cout<<"EXIT";
+             cout<<"PLEASE SELECT Your Option (1-3)";
+             ch=getche();
+             switch(ch){
+                 case '1':
+                 place_order();
+                 getch();
+                 break;
+                 case '2':
+                 admin_menu();
+                 break;
+                 case '3' :
+                 return 0;
+                 default :
+                 cout<<"\a";
+
+    
+             }
+
+         }while (ch != '3');
+     }
